@@ -11,7 +11,10 @@ def index():
 def articles():
     return render_templates('articles.html', articles = Articles)
 
-
+@app.route('/article/<string:id>/')
+def article(id)
+    return render_templates('article.html', id=id)
+    
 if __name__ == '__main__':
     app.run(debug=True)
   
