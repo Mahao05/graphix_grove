@@ -7,10 +7,17 @@
   </head>
   <body>
     <nav class="nav flex-sm-column">
-  <a class="nav-link active" href="/">Home</a>
-  <a class="nav-link" href="#">Link</a>
-  <a class="nav-link" href="#">Link</a>
+  <a class="nav-link active" href="/">Dashboard</a>
+  <a class="nav-link" href="/market">Market cap</a>
+  <a class="nav-link" href="/favourites">Favourites</a>
+  <a class="nav-link" href="/news">News</a>
   <a class="nav-link disabled" href="#">Disabled</a>
+   <select id="currencySelector">
+        <option value="usd">USD</option>
+        <option value="eur">EUR</option>
+        <option value="gbp">GBP</option>
+    </select>
+    <button id="themeToggle">Dark Mode</button>
 </nav>
     <div class="container">
       {% block body %}{% endblock %}
