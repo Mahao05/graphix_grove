@@ -51,6 +51,7 @@ def register():
         # Create cursor
         cur = mysql.connection.cursor()
 
+        #Execute query
         cur.execute("INSEET INTO users(name, email, username, password) VALUES(%s, %s, %s, %s)", (name, email, username, password))
 
         #Commit to DB
@@ -61,11 +62,10 @@ def register():
 
         flah('You are now registered and can log in', 'success')
         
-        redirect(url_for('dashboard'))
-        
-        return render_template('register.html')
+        return redirect(url_for('login'))  
     return render_template('register.html', form=form)
 
 if __name__ == '__main__':
+    app.secret_key='key1105'
     app.run(debug=True)
     
