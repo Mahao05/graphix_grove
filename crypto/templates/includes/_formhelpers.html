@@ -1,0 +1,9 @@
+{% macro tender_field(field) %}
+   {{ field.label }}
+   {{ field(**kwags) |safe }}
+   {% if field.errors %}
+      {% for error in field.errors %}
+        <span class="help-line">{{ error}}</span>
+      {% end for %}
+    {% endif %}
+{% endmacro %}  
