@@ -5,3 +5,11 @@
        {% endfor %}
     {% endif %}
 {% endif %} 
+
+{% if error %}
+  <div class="alert alert-danger">{{error}}</div>
+{% endif %}
+
+{% if msg %}
+  <div class="alert alert-success">{{msg}}</div>
+{% endif %}
