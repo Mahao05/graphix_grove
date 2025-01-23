@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
 {% block body %}
-Home
+<div class="jumbotron text-center">
+  <h1>Welcome to Graphix Grove</h1>
+  <p class="lead">This is a cryptocurrency interactive data dashboard built to offer you real-time data</p>
+  {% if session.logged_in == NULL%}
+    <a href="/register" class="btn btn-primary btn-lg">Register</a>
+    <a href="/login" class="btn btn-success btn-lg">Log in</a>
+  {% enfif %}
+</div>
 {% endblock %}
