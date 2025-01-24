@@ -14,6 +14,7 @@
   <a class="nav-link" href="/news">News</a>
   <a class="nav-link" hreg="/selector">Currency currencySelector</a>
   <a class="nav-link disabled" href="#">Disabled</a>
+  <input type="text" id="searchBar" placeholder="Search Cryptos" />
    <select id="currencySelector">
         <option value="usd">USD</option>
         <option value="eur">EUR</option>
@@ -35,7 +36,6 @@
       {% include 'includes/_messages.html' %}
       {% block body %}{% endblock %}
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js">
     </script>
   </body>
