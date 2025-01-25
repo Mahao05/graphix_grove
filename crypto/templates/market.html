@@ -1,5 +1,32 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block body%}
-  
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <h1 class="text-center">Market Cap</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8 col-12 mx-auto">
+    <canvas id="marketCapChart" class="w-100"></canvas>
+  </div>
+</div>
+
+<script>
+  const socket = io();
+  socket.on("updateData", (data) => {
+    const ctx = document.getElementById('marketCapChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(data.marketCap),
+        datasets: [{
+          data: Object.values(data.marketCap),
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        }]
+      }
+    });
+  });
+</script>
 {% endblock %}
