@@ -1,11 +1,17 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, sesssion
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, sesssion, jsonify
 from data import Articles
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+from flask_socketio import SocketIO
+import requests
+import threading
+import time
+
 
 app = Flask (__name__)
+socketio = SocketIO(app)
 
 # Config MySQL
 app.config['MYSQL_HOST'] = 'localhost'
@@ -160,13 +166,61 @@ def add_article():
         curl.close()
 
         flash('Article Created', 'success')
-
+        
         return redirect(url_for('dashboard'))
    
     return render_template('add_article.html', form=form)
+
+# Background data fetch
+market_data = {}
+news_data = []
+
+#Add data
+def fetch_data():
+    global market_data, news_data
+    while True:
+        try:
+            # Fetch market cap data
+            market_data_response = requests.get("https://api.coingecko.com/api/v3/global").json()
+            market_data = market_data_response['data']['total_market_cap']
+
+            # Fetch crypto news
+            news_response = requests.get("https://cryptopanic.com/api/v1/posts/?auth_token=YOUR_API_KEY").json()
+            news_data = news_response['results']
+
+            # Send data to the frontend via SocketIO
+            socketio.emit("updateData", {"marketCap": market_data, "news": news_data})
+
+            time.sleep(10)
+        except Exception as e:
+            print("Error fetching data:", e)
+
+# Start background thread
+threading.Thread(target=fetch_data, daemon=True).start()
+
+# Routes
+@app.route("/")
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route("/market-cap")
+def market_cap():
+    return render_template("market_cap.html")
+
+@app.route("/news")
+def news():
+    return render_template("news.html")
+
+@app.route("/favorites")
+def favorites():
+    return render_template("favorites.html")
+
+@app.route("/price")
+def price():
+    return render_template("price.html")
     
     
 if __name__ == '__main__':
     app.secret_key='key1105'
-    app.run(debug=True)
+    socketio.run(app, debug=True)
     
