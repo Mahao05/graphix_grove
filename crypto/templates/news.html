@@ -1,5 +1,30 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block body%}
-  
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <h1 class="text-center">Latest News</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8 col-12 mx-auto">
+    <ul id="newsList" class="list-group"></ul>
+  </div>
+</div>
+
+<script>
+  const socket = io();
+  socket.on("updateData", (data) => {
+    const newsList = document.getElementById("newsList");
+    newsList.innerHTML = "";
+    data.news.forEach(item => {
+      const li = document.createElement("li");
+      li.className = "list-group-item";
+      li.textContent = item.title;
+      newsList.appendChild(li);
+    });
+  });
+</script>
 {% endblock %}
+
