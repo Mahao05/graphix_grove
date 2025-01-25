@@ -3,8 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Graphix_grove</title>
-    <link rel = "stylesheet" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
-    <link rel = "styles.css" href="../static/">pl
+    <link rel = "stylesheet" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>  
+   <link rel="stylesheet" href="/static/css/styles.css>
   </head>
   <body>
     <nav class="nav flex-sm-column">
@@ -12,7 +16,7 @@
   <a class="nav-link" href="/market">Market cap</a>
   <a class="nav-link" href="/favourites">Favourites</a>
   <a class="nav-link" href="/news">News</a>
-  <a class="nav-link" hreg="/selector">Currency currencySelector</a>
+  <a class="nav-link" hreg="/selector">Currency Selector</a>
   <a class="nav-link disabled" href="#">Disabled</a>
   <input type="text" id="searchBar" placeholder="Search Cryptos" />
    <select id="currencySelector">
@@ -32,7 +36,7 @@
       {% endif %}
     </ul>
 </nav>
-    <div class="container">
+    <div class="container my-4">
       {% include 'includes/_messages.html' %}
       {% block body %}{% endblock %}
     </div>
