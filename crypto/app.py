@@ -8,6 +8,7 @@ from flask_socketio import SocketIO
 import requests
 import threading
 import time
+import os
 
 
 app = Flask (__name__)
@@ -280,8 +281,17 @@ def handle_realtime_data():
     socketio.emit("update_data", {"crypto_data"}
 
 
+
+import os
+from flask import Flask
+from flask_socketio import SocketIO
+
+app = Flask(__name__)
+socketio = SocketIO(app)
+
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
-    port = int(os.environ.get("PORT", 4000)
-    app.run(host="0.0.0.0", port=port)
+    socketio.run(app, debug=True) 
+    port = int(os.environ.get("PORT", 4000)) 
+    socketio.run(app, host="0.0.0.0", port=port, debug=True)
      
