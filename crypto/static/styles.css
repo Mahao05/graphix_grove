@@ -17,4 +17,13 @@ canvas {
   height: auto !important;
 }
 
+#currencySelector {
+  max-width: 300px;
+  margin-left: auto;
+}
 
+@media (max-width: 768px) {
+  #currencySelector {
+    width: 100%;
+  }
+}
