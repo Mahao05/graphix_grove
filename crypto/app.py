@@ -8,6 +8,7 @@ from flask_socketio import SocketIO
 import requests
 import threading
 import time
+import os
 
 app = Flask (__name__)
 app.secret_key='key1105'
@@ -278,14 +279,6 @@ def handle_realtime_data():
     data = fetch_crypto_data()
     socketio.emit("update_data", {"crypto_data"}
 
-
-
-import os
-from flask import Flask
-from flask_socketio import SocketIO
-
-app = Flask(__name__)
-socketio = SocketIO(app)
 
 
 if __name__ == '__main__':
