@@ -8,12 +8,11 @@ from flask_socketio import SocketIO
 import requests
 import threading
 import time
-from flask_cors import CORS
 
 
 app = Flask (__name__)
 socketio = SocketIO(app)
-CORS(app)  # Enable CORS for all routes
+
 
 # Config MySQL
 app.config['MYSQL_HOST'] = 'localhost'
@@ -221,11 +220,6 @@ def favorites():
 def price():
     return render_template("price.html")
 
-
-@app.route('/api/data', methods=['GET'])
-def get_data():
-    # Example data to send to Node.js
-    return jsonify({'message': 'Hello from Flask!', 'status': 'success'})
     
     
 if __name__ == '__main__':
@@ -233,6 +227,6 @@ if __name__ == '__main__':
     socketio.run(app, debug=True)
     port = int(os.environ.get("PORT", 4000)
     app.run(host="0.0.0.0", port=port)
-    app.run(port=5000)  # Run Flask on port 5000
+    
     
     
