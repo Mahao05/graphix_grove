@@ -8,8 +8,6 @@ from flask_socketio import SocketIO
 import requests
 import threading
 import time
-import os
-
 
 app = Flask (__name__)
 app.secret_key='key1105'
