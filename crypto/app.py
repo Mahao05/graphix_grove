@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, sesssion, jsonify
+afrom flask import Flask, render_template, flash, redirect, url_for, session, logging, request, sesssion, jsonify
 from data import Articles
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
@@ -282,7 +282,6 @@ def handle_realtime_data():
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True) 
     port = int(os.environ.get("PORT", 4000)) 
     socketio.run(app, host="0.0.0.0", port=port, debug=True)
      
