@@ -218,7 +218,12 @@ def favorites():
 @app.route("/price")
 def price():
     return render_template("price.html")
-    
+
+
+    @app.route('/api/data', methods=['GET'])
+def get_data():
+    # Example data to send to Node.js
+    return jsonify({'message': 'Hello from Flask!', 'status': 'success'})
     
 if __name__ == '__main__':
     app.secret_key='key1105'
