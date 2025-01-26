@@ -1,34 +1,115 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block content %}
 <div class="row">
-  <div class="col-12">
-    <h1 class="text-center">Dashboard</h1>
-    <p class="text-center">Overview of cryptocurrency market trends.</p>
+  <div class="col-12 text-center">
+    <h1>Dashboard</h1>
+    <p>Currently displaying data in: <strong>{{ currency }}</strong></p>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-8 col-12 mx-auto">
-    <canvas id="marketOverview" class="w-100"></canvas>
+  <div class="col-12 mb-4">
+    <h5>Top 10 Cryptocurrencies</h5>
+    <ul id="crypto-list">
+      {% for coin in data.crypto_data %}
+      <li>{{ coin.name }}: ${{ coin.current_price }} ({{ coin.price_change_percentage_24h }}% 24h)</li>
+      {% endfor %}
+    </ul>
   </div>
 </div>
 
+<div class="row">
+  <div class="col-md-4 col-12 mb-4">
+    <h5>Market Share</h5>
+    <canvas id="pieChart"></canvas>
+  </div>
+  <div class="col-md-4 col-12 mb-4">
+    <h5>24h Volume</h5>
+    <canvas id="barGraph"></canvas>
+  </div>
+  <div class="col-md-4 col-12 mb-4">
+    <h5>Price Trend</h5>
+    <canvas id="lineGraph"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script>
   const socket = io();
-  socket.on("updateData", (data) => {
-    const ctx = document.getElementById('marketOverview').getContext('2d');
-    new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: Object.keys(data.marketCap),
-        datasets: [{
-          data: Object.values(data.marketCap),
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-        }]
-      }
+
+  // Update cryptocurrency data in real time
+  socket.on("update_data", (data) => {
+    const cryptoList = document.getElementById("crypto-list");
+    cryptoList.innerHTML = "";
+    data.crypto_data.forEach((coin) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = `${coin.name}: $${coin.current_price} (${coin.price_change_percentage_24h}% 24h)`;
+      cryptoList.appendChild(listItem);
     });
+
+    // Update Charts (example)
+    updateCharts(data.crypto_data);
+  });
+
+  function updateCharts(cryptoData) {
+    const labels = cryptoData.map((coin) => coin.name);
+    const marketCaps = cryptoData.map((coin) => coin.market_cap);
+    const volumes = cryptoData.map((coin) => coin.total_volume);
+
+    // Update Pie Chart
+    pieChart.data.labels = labels;
+    pieChart.data.datasets[0].data = marketCaps;
+    pieChart.update();
+
+    // Update Bar Graph
+    barGraph.data.labels = labels;
+    barGraph.data.datasets[0].data = volumes;
+    barGraph.update();
+  }
+
+  // Initialize Charts
+  const pieChart = new Chart(document.getElementById("pieChart").getContext("2d"), {
+    type: "pie",
+    data: {
+      labels: {{ data.crypto_data|map(attribute="name")|list|tojson }},
+      datasets: [
+        {
+          data: {{ data.crypto_data|map(attribute="market_cap")|list|tojson }},
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        },
+      ],
+    },
+  });
+
+  const barGraph = new Chart(document.getElementById("barGraph").getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: {{ data.crypto_data|map(attribute="name")|list|tojson }},
+      datasets: [
+        {
+          label: "24h Volume",
+          data: {{ data.crypto_data|map(attribute="total_volume")|list|tojson }},
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+        },
+      ],
+    },
+  });
+
+  // Simulate price trends for the example
+  const lineGraph = new Chart(document.getElementById("lineGraph").getContext("2d"), {
+    type: "line",
+    data: {
+      labels: ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
+      datasets: [
+        {
+          label: "Price Trend",
+          data: [42000, 43000, 44000, 45000, 46000, 47000, 48000],
+          fill: false,
+          borderColor: "#36A2EB",
+          tension: 0.1,
+        },
+      ],
+    },
   });
 </script>
 {% endblock %}
-
