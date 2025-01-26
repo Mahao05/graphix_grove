@@ -119,16 +119,16 @@ def login():
 # Check if user is logged in
 def is_logged_in(f):
     @wraps(f)
-    def wrap(*args, **kwargs)
+    def wrap(*args, **kwargs):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
             flash('Unauthorized, Please login', 'danger')
             return redirect(url_for('login'))
-    return warap    
+    return wrap    
 
 # Logout
-@app_route('logout')
+@app_route('/logout')
 def logout():
     session.clear()
     flash('You are now logged out', 'success')
