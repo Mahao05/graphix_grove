@@ -1,8 +1,8 @@
-> Project Title
+**> Project Title**
 
-**Graphix Grove**
+Graphix Grove
 
-# Authors
+**> Authors**
 
 Neo Molefe
 
