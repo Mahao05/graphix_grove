@@ -280,8 +280,9 @@ def handle_realtime_data():
     socketio.emit("update_data", {"crypto_data"}
 
 
-
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 4000)) 
+    port = int(os.environ.get("PORT", 4000))  # Use 4000 as the default port
     socketio.run(app, host="0.0.0.0", port=port, debug=True)
-     
+
+
+            
