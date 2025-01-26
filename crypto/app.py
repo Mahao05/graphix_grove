@@ -220,8 +220,27 @@ def favorites():
 def price():
     return render_template("price.html")
 
-    
-    
+# Default currency
+@app.before_request
+def set_default_currency():
+    if "currency" not in session:
+        session["currency"] = "USD"
+
+# Route to set currency
+@app.route("/set-currency")
+def set_currency():
+    currency = request.args.get("currency", "USD")
+    session["currency"] = currency
+    return redirect(request.referrer or url_for("dashboard"))
+
+@app.route("/")
+def dashboard():
+    currency = session["currency"]
+    # Example data to pass to the template
+    data = {"marketCap": {"BTC": 500000000, "ETH": 300000000}, "currency": currency}
+    return render_template("dashboard.html", data=data)
+
+
 if __name__ == '__main__':
     app.secret_key='key1105'
     socketio.run(app, debug=True)
