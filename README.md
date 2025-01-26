@@ -13,16 +13,16 @@ This project is a cryptocurrency interactive data dashboard that aims to create 
 
 ## Key Include  
 
-# Dashboard with Headings:
+** Dashboard with Headings: **
    •Market Cap, News, Favourites sections.
 ##Graphs:
     •Pie chart for market capitalization.
-# Real-Time Updates:
+** Real-Time Updates: **
      •WebSocket (Socket.IO) for live data updates.
-# Responsive Design:
+** Responsive Design: **
 Bootstrap for styling.
 
-## Languges
+## Languges 
 
   •Flask
   
