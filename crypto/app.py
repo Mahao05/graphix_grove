@@ -8,6 +8,7 @@ from flask_socketio import SocketIO
 import requests
 import threading
 import time
+from flask_cors import CORS
 
 
 app = Flask (__name__)
@@ -218,11 +219,19 @@ def favorites():
 @app.route("/price")
 def price():
     return render_template("price.html")
-    
-    
+
+@app.route('/api/data', methods=['GET'])
+def get_data():
+    # Example data to send to Node.js
+    return jsonify({'message': 'Hello from Flask!', 'status': 'success'})
+
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
+
 if __name__ == '__main__':
     app.secret_key='key1105'
     socketio.run(app, debug=True)
     port = int(os.environ.get("PORT", 4000)
     app.run(host="0.0.0.0", port=port)
+    
     
