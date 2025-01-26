@@ -19,11 +19,16 @@
   <a class="nav-link" hreg="/price">Price</a>
   <a class="nav-link disabled" href="#">Disabled</a>
   <input type="text" id="searchBar" placeholder="Search Cryptos" />
-   <select id="currencySelector">
-        <option value="usd">USD</option>
-        <option value="eur">EUR</option>
-        <option value="gbp">GBP</option>
-    </select>
+   <!-- Currency Selector -->
+        <form id="currencySelector" class="d-flex">
+          <label for="currencyDropdown" class="me-2 my-auto">Currency:</label>
+          <select id="currencyDropdown" class="form-select" aria-label="Select Currency">
+            <option value="USD" selected>USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
+          </select>
+        </form>
     <button id="themeToggle">Dark Mode</button>
 
     <ul class="nav navbar-nav navbar-right">
