@@ -200,13 +200,13 @@ def fetch_data():
 threading.Thread(target=fetch_data, daemon=True).start()
 
 # Routes
-@app.route("/")
+@app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
 
-@app.route("/market-cap")
+@app.route("/market")
 def market_cap():
-    return render_template("market_cap.html")
+    return render_template(".html")
 
 @app.route("/news")
 def news():
@@ -251,6 +251,32 @@ def format_currency(value, currency):
     elif currency == "JPY":
         return f"¥{value:,}"
     return f"{value:,} {currency}"
+
+# Helper function to fetch live data
+def fetch_crypto_data():
+    url = "https://api.coingecko.com/api/v3/coins/markets"
+    params = {
+        "vs_currency": session.get("currency", "usd"),
+        "order": "market_cap_desc",
+        "per_page": 10,
+        "page": 1,
+        "sparkline": "false",
+    }
+    response = requests.get(url, params=params)
+    return response.json()
+
+@app.route("/dashboard")
+def dashboard():
+    session["currency"] = session.get("currency", "usd")
+    data = fetch_crypto_data()
+    return render_template("dashboard.html", data={"crypto_data": data, "currency": session["currency"]})
+
+
+@socketio.on("fetch_data")
+def handle_realtime_data():
+    # Send updated data to the client in real-time
+    data = fetch_crypto_data()
+    socketio.emit("update_data", {"crypto_data"}
 
 
 
