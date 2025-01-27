@@ -22,6 +22,20 @@ canvas {
   margin-left: auto;
 }
 
+canvas {
+  max-width: 100%;
+  height: auto !important;
+}
+
+h5 {
+  margin-bottom: 1rem;
+}
+
+.row {
+  margin-bottom: 2rem;
+}
+
+
 @media (max-width: 768px) {
   #currencySelector {
     width: 100%;
