@@ -11,6 +11,12 @@ app = Flask(__name__)
 app.secret_key = "secret123"
 socketio = SocketIO(app)
 
+
+# Index
+@app.route('/')
+def index():
+    return render_template('home.html')
+
 # Helper function to fetch live data
 def fetch_crypto_data():
     url = "https://api.coingecko.com/api/v3/coins/markets"
