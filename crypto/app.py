@@ -1,5 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify
-from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify, StringField
 from passlib.hash import sha256_crypt
 from functools import wraps
 from flask_socketio import SocketIO
@@ -10,7 +9,7 @@ import time
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-
+TextAreaField, PasswordField, 
 # Index
 @app.route('/')
 def home():
