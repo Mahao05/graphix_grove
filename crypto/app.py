@@ -275,12 +275,12 @@ def dashboard():
 def handle_realtime_data():
     # Send updated data to the client in real-time
     data = fetch_crypto_data()
-    socketio.emit("update_data", {"crypto_data"}
+    socketio.emit("update_data", {"crypto_data"})
 
 
 
 if __name__ == '__main__':
-    app.secret_key='key1105
+    app.secret_key='key1105'
     app.run(debug=True)  
 
-            
+
