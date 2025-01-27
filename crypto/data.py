@@ -5,7 +5,7 @@ def Articles():
             'title':'Article One',
             'body':'Cryptocurrency',
             'author':'Brad Traversy',
-            'create_date':'02-25-2025'
+            'create_date':'01-25-2025'
         },
         {
             'id': 2,
