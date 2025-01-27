@@ -1,4 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from functools import wraps
 from flask_socketio import SocketIO
 import requests
