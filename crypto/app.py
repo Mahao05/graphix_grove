@@ -37,7 +37,6 @@ def handle_realtime_data():
     data = fetch_crypto_data()
     socketio.emit("update_data", {"crypto_data": data})
 
-
 @app.route("/market-cap")
 def market_cap():
     currency = session["currency"]
@@ -51,6 +50,38 @@ def market_cap():
     return render_template(
         "market_cap.html", data={"marketData": market_cap_data, "currency": currency}
     )
+
+# Define the custom filter for formatting currency
+def format_currency(value, symbol="$"):
+    """
+    Format a number as currency.
+    
+    Args:
+        value (float): The number to format.
+        symbol (str): The currency symbol (default is "$").
+    
+    Returns:
+        str: The formatted currency string.
+    """
+    try:
+        return f"{symbol}{value:,.2f}"  # Format number with 2 decimal places and thousands separator
+    except (ValueError, TypeError):
+        return value  # Return the original value if formatting fails
+
+# Register the filter with Jinja2
+app.jinja_env.filters["currency"] = format_currency
+
+@app.template_filter("format_currency")
+def format_currency(value, currency):
+    if currency == "USD":
+        return f"${value:,}"
+    elif currency == "EUR":
+        return f"€{value:,}"
+    elif currency == "GBP":
+        return f"£{value:,}"
+    elif currency == "JPY":
+        return f"¥{value:,}"
+    return f"{value:,} {currency}"
 
 
 if __name__ == "__main__":
