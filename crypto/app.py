@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify, StringField
+from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify
 from passlib.hash import sha256_crypt
 from functools import wraps
 from flask_socketio import SocketIO
