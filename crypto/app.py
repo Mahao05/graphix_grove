@@ -1,13 +1,14 @@
 from flask import Flask
-import os
-from app import app
+import webbrowser
+from flask_ngok import run_with_ngrok
 
 app = Flask(__name__)
+run_with_ngrok(app)
 
 @app.route("/")
 def hello_world():
     return "Hello, World!"
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 4000))
-    app.run(host="0.0.0.0", port=port)
+    webbrowser.open_new('http://127.0.0.1:5000/') 
+    app.run()
