@@ -1,39 +1,41 @@
-
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, session
 from flask_socketio import SocketIO
+import requests
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Required for session management
+app.secret_key = "your_secret_key"
 socketio = SocketIO(app)
 
-# Default currency
-@app.before_request
-def set_default_currency():
-    if "currency" not in session:
-        session["currency"] = "USD"
+# Helper function to fetch live data
+def fetch_crypto_data():
+    url = "https://api.coingecko.com/api/v3/coins/markets"
+    params = {
+        "vs_currency": session.get("currency", "usd"),
+        "order": "market_cap_desc",
+        "per_page": 10,
+        "page": 1,
+        "sparkline": "false",
+    }
+    response = requests.get(url, params=params)
+    return response.json()
 
-# Route to set currency
-@app.route("/set-currency")
-def set_currency():
-    currency = request.args.get("currency", "USD")
-    session["currency"] = currency
-    return redirect(request.referrer or url_for("dashboard"))
-
-@app.route("/")
+@app.route("/dashboard")
 def dashboard():
-    currency = session["currency"]
-    # Example data to pass to the template
-    data = {"marketCap": {"BTC": 500000000, "ETH": 300000000}, "currency": currency}
-    return render_template("dashboard.html", data=data)
+    session["currency"] = session.get("currency", "usd")
+    data = fetch_crypto_data()
+    return render_template("dashboard.html", data={"crypto_data": data, "currency": session["currency"]})
 
-@app.template_filter("format_currency")
-def format_currency(value, currency):
-    if currency == "USD":
-        return f"${value:,}"
-    elif currency == "EUR":
-        return f"€{value:,}"
-    elif currency == "GBP":
-        return f"£{value:,}"
-    elif currency == "JPY":
-        return f"¥{value:,}"
-    return f"{value:,} {currency}"
+@app.route("/market")
+def market_cap():
+    session["currency"] = session.get("currency", "usd")
+    data = fetch_crypto_data()
+    return render_template("market_cap.html", data={"crypto_data": data, "currency": session["currency"]})
+
+@socketio.on("fetch_data")
+def handle_realtime_data():
+    # Send updated data to the client in real-time
+    data = fetch_crypto_data()
+    socketio.emit("update_data", {"crypto_data": data})
+
+if __name__ == "__main__":
+    socketio.run(app, debug=True)
