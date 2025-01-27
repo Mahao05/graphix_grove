@@ -1,26 +1,32 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Graphix_grove</title>
-    <link rel = "stylesheet" href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/static/js/main.js"></script>
-    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>  
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   <link rel="stylesheet" href="/static/styles.css>
-  </head>
-  <body>
-    <nav class="nav flex-sm-column">
-  <a class="nav-link active" href="/">Dashboard</a>
-  <a class="nav-link" href="/market">Market cap</a>
-  <a class="nav-link" href="/favourites">Favourites</a>
-  <a class="nav-link" href="/news">News</a>
-  <a class="nav-link" hreg="/price">Price</a>
-  <a class="nav-link disabled" href="#">Disabled</a>
-  <input type="text" id="searchBar" placeholder="Search Cryptos" />
-   <!-- Currency Selector -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphix grove</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/static/js/main.js"></script>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Crypto Dashboard</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="/market-cap">Market Cap</a></li>
+          <li class="nav-item"><a class="nav-link" href="/news">News</a></li>
+          <li class="nav-item"><a class="nav-link" href="/favorites">Favorites</a></li>
+          <li class="nav-item"><a class="nav-link" href="/price">Price</a></li>
+        </ul>
+        <!-- Currency Selector -->
         <form id="currencySelector" class="d-flex">
           <label for="currencyDropdown" class="me-2 my-auto">Currency:</label>
           <select id="currencyDropdown" class="form-select" aria-label="Select Currency">
@@ -30,7 +36,25 @@
             <option value="JPY">JPY</option>
           </select>
         </form>
-    <button id="themeToggle">Dark Mode</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container my-4">
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    // Handle currency selection
+    const currencyDropdown = document.getElementById("currencyDropdown");
+    currencyDropdown.addEventListener("change", (event) => {
+      const selectedCurrency = event.target.value;
+      fetch(`/set-currency?currency=${selectedCurrency}`)
+        .then(() => location.reload()); // Reload the page to apply the new currency
+    });
+  </script>
+</body>
+</html>
 
     <ul class="nav navbar-nav navbar-right">
       {% if session.logged in %}
