@@ -9,7 +9,7 @@ import requests
 import threading
 import time
 
-app = Flask (__name__)
+app = Flask(__name__)
 socketio = SocketIO(app)
 
 
