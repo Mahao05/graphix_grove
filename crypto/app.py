@@ -1,9 +1,11 @@
 from flask import Flask, render_template, session
 from flask_socketio import SocketIO
 import requests
+import threading
+import time
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
+app.secret_key = "secrete123"
 socketio = SocketIO(app)
 
 # Helper function to fetch live data
@@ -82,6 +84,41 @@ def format_currency(value, currency):
     elif currency == "JPY":
         return f"¥{value:,}"
     return f"{value:,} {currency}"
+
+# Background data fetch
+market_data = {}
+news_data = []
+
+def fetch_data():
+    global market_data, news_data
+    while True:
+        try:
+            # Fetch market cap data
+            market_data_response = requests.get("https://api.coingecko.com/api/v3/global").json()
+            market_data = market_data_response['data']['total_market_cap']
+
+            # Fetch crypto news
+            news_response = requests.get("https://cryptopanic.com/api/v1/posts/?auth_token=YOUR_API_KEY").json()
+            news_data = news_response['results']
+
+            # Send data to the frontend via SocketIO
+            socketio.emit("updateData", {"marketCap": market_data, "news": news_data})
+
+            time.sleep(10)
+        except Exception as e:
+            print("Error fetching data:", e)
+
+# Start background thread
+threading.Thread(target=fetch_data, daemon=True).start()
+
+
+@app.route("/news")
+def news():
+    return render_template("news.html")
+
+@app.route("/favorites")
+def favorites():
+    return render_template("favorites.html")
 
 
 if __name__ == "__main__":
