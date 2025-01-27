@@ -37,5 +37,21 @@ def handle_realtime_data():
     data = fetch_crypto_data()
     socketio.emit("update_data", {"crypto_data": data})
 
+
+@app.route("/market-cap")
+def market_cap():
+    currency = session["currency"]
+    # Replace these with actual API data
+    market_cap_data = {
+        "marketCap": {"BTC": 600000000, "ETH": 400000000, "Others": 200000000},
+        "volume": {"BTC": 1500, "ETH": 900, "Others": 600},
+        "trend": [1.2, 1.3, 1.5, 1.4, 1.6, 1.8, 2.0],
+        "dates": ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"],
+    }
+    return render_template(
+        "market_cap.html", data={"marketData": market_cap_data, "currency": currency}
+    )
+
+
 if __name__ == "__main__":
     socketio.run(app, debug=True)
