@@ -1,11 +1,14 @@
-from flask import Flask, render_template, session
+from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from passlib.hash import sha256_crypt
+from functools import wraps
 from flask_socketio import SocketIO
 import requests
 import threading
 import time
 
 app = Flask(__name__)
-app.secret_key = "secrete123"
+app.secret_key = "secret123"
 socketio = SocketIO(app)
 
 # Helper function to fetch live data
