@@ -1,6 +1,4 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, logging, request, jsonify
-from data import Articles
-from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
@@ -13,31 +11,10 @@ app = Flask(__name__)
 socketio = SocketIO(app)
 
 
-# Config MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MySQL_USER'] = 'root'
-app.config['MySQL_PASSWORD'] = 'Dont firget to add password'
-app.config['MYSQL_DB'] = 'crypto'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-# init MYSQL
-mysql = MySQL(app)
-
-Articles = Articles()
-
 # Index
 @app.route('/')
 def home():
     return render_template('home.html')
-
-# Articles    
-@app.route('/articles')
-def articles():
-    return render_templates('articles.html', articles = Articles)
-
-# Single Article
-@app.route('/article/<string:id>/')
-def article(id):
-    return render_templates('article.html', id=id)
 
 # Register Form Class
 class RegisterForm(Form):
@@ -144,33 +121,6 @@ class ArticleForm(Form):
     title = StringField('Title', [validators.Length(min=1, max=200)])
     body = TextAreaField('Body', [validators.Length(min=30)])
 
-# Add Article
-@app.route('/add_article', methods=['GET', 'POST'])
-@is_logged_in
-def add_article():
-    form = ArticleForm(request.form)
-    if request.method == 'POST' and form.validate():
-        title = form.title.data
-        body = form.body.data
-    
-        # Create Cursor
-        cur = mysql.connection.cursor()
-
-        # Execute
-        cur.execute("INSERT INTO articles(titles, body, author) VALUES(%s, %s, %s)",(title, body, session['username']))
-    
-        # Commit to DB
-        mysql.connection.commit()
-
-        # Close connection
-        curl.close()
-
-        flash('Article Created', 'success')
-        
-        return redirect(url_for('dashboard'))
-   
-    return render_template('add_article.html', form=form)
-
 # Background data fetch
 market_data = {}
 news_data = []
@@ -205,7 +155,7 @@ def dashboard():
 
 @app.route("/market")
 def market_cap():
-    return render_template(".html")
+    return render_template("market.html")
 
 @app.route("/news")
 def news():
@@ -215,9 +165,6 @@ def news():
 def favorites():
     return render_template("favorites.html")
 
-@app.route("/price")
-def price():
-    return render_template("price.html")
 
 # Default currency
 @app.before_request
