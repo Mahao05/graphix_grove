@@ -26,4 +26,14 @@ def dashboard():
     data = {"marketCap": {"BTC": 500000000, "ETH": 300000000}, "currency": currency}
     return render_template("dashboard.html", data=data)
 
-# Add more routes as needed
+@app.template_filter("format_currency")
+def format_currency(value, currency):
+    if currency == "USD":
+        return f"${value:,}"
+    elif currency == "EUR":
+        return f"€{value:,}"
+    elif currency == "GBP":
+        return f"£{value:,}"
+    elif currency == "JPY":
+        return f"¥{value:,}"
+    return f"{value:,} {currency}"
