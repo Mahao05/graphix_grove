@@ -7,13 +7,13 @@ import requests
 import threading
 import time
 
-application = Flask(__name__)
-apppplication.secret_key = "secret123"
+app = Flask(__name__)
+app.secret_key = "secret123"
 socketio = SocketIO(app)
 
 
 # Index
-@application.route('/')
+@app.route('/')
 def index():
     return render_template('home.html')
 
@@ -30,13 +30,13 @@ def fetch_crypto_data():
     response = requests.get(url, params=params)
     return response.json()
 
-@application.route("/dashboard")
+@app.route("/dashboard")
 def dashboard():
     session["currency"] = session.get("currency", "usd")
     data = fetch_crypto_data()
     return render_template("dashboard.html", data={"crypto_data": data, "currency": session["currency"]})
 
-@application.route("/market")
+@app.route("/market")
 def market_cap():
     session["currency"] = session.get("currency", "usd")
     data = fetch_crypto_data()
@@ -48,7 +48,7 @@ def handle_realtime_data():
     data = fetch_crypto_data()
     socketio.emit("update_data", {"crypto_data": data})
 
-@application.route("/market-cap")
+@app.route("/market-cap")
 def market_cap():
     currency = session["currency"]
     # Replace these with actual API data
@@ -82,7 +82,7 @@ def format_currency(value, symbol="$"):
 # Register the filter with Jinja2
 app.jinja_env.filters["currency"] = format_currency
 
-@application.template_filter("format_currency")
+@app.template_filter("format_currency")
 def format_currency(value, currency):
     if currency == "USD":
         return f"${value:,}"
@@ -121,11 +121,11 @@ def fetch_data():
 threading.Thread(target=fetch_data, daemon=True).start()
 
 
-@application.route("/news")
+@app.route("/news")
 def news():
     return render_template("news.html")
 
-@application.route("/favorites")
+@app.route("/favorites")
 def favorites():
     return render_template("favorites.html")
 
@@ -142,7 +142,7 @@ class RegisterForm(Form):
 
 
 # User Register
-@application.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -170,7 +170,7 @@ def register():
 
 
 # User login
-@application.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         # Get Form Fields
@@ -219,7 +219,7 @@ def is_logged_in(f):
     return wrap
 
 # Logout
-@application.route('/logout')
+@app.route('/logout')
 @is_logged_in
 def logout():
     session.clear()
@@ -228,4 +228,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    socketio.run(application, debug=True)
+    socketio.run(app, debug=True)
