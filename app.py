@@ -3,6 +3,7 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 from flask_socketio import SocketIO
+from app import routes
 import requests
 import threading
 import time
@@ -10,6 +11,8 @@ import time
 app = Flask(__name__)
 app.secret_key = "secret123"
 socketio = SocketIO(app)
+
+from app import app
 
 
 # Index
